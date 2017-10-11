@@ -15,14 +15,22 @@ import android.widget.ImageView;
 
 
 public class Type1 extends ZipperLock {
+    //背景图片
     private Bitmap bmpBg;
+    //拉环
     private Bitmap bmpMask;
+    //拉链
     private Bitmap bmpPendant;
+    //后面的bitmap
     private Bitmap bmpRezBack;
+    //前面的bitmap
     private Bitmap bmpRezFront;
+    //完整的拉链
     private Bitmap bmpZipper;
     private Bitmap bmpZipperHalf;
+    //后面的canvas
     private Canvas canvasBack;
+    //前面的canvas
     private Canvas canvasFront;
     private ImageView imgFront;
     private int offset = 0;
