@@ -8,6 +8,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+/**
+ * MainActivity
+ * Created by xingzhiqiao on 2017/9/15.
+ */
 public class MainActivity extends Activity implements View.OnTouchListener {
 
 
@@ -69,7 +73,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        mZipperLock.CheckMotionEvent(event);
+        mZipperLock.checkMotionEvent(event);
         return true;
     }
 }

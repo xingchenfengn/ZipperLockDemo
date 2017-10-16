@@ -26,14 +26,14 @@ public class LockScreenUtils implements OnClickListener, OnTouchListener {
     }
 
     public boolean onTouch(View v, MotionEvent event) {
-        this.mZipperLock.CheckMotionEvent(event);
+        this.mZipperLock.checkMotionEvent(event);
         return true;
     }
 
     public void unlockScreen() {
         Log.v("LOCK_TEST", "unlockScreen()");
         Log.v("LOCK_TEST", "unlockScreen() " + this.masterActivity.getLocalClassName());
-        this.mZipperLock.DestroyBitmaps();
+        this.mZipperLock.destroyBitmaps();
         this.masterActivity.finish();
     }
 

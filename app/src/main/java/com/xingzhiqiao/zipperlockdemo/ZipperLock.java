@@ -4,6 +4,9 @@ import android.content.Context;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
+/**
+ * Created by xingzhiqiao on 2017/9/15.
+ */
 public abstract class ZipperLock {
     public Context context;
     float delta = 0.0f;
@@ -18,15 +21,15 @@ public abstract class ZipperLock {
     boolean unlock = false;
     int width;
 
-    public abstract void ChangeImages(float f);
+    public abstract void changeImages(float f);
 
-    public abstract void CheckMotionEvent(MotionEvent motionEvent);
+    public abstract void checkMotionEvent(MotionEvent motionEvent);
 
-    public abstract void DestroyBitmaps();
+    public abstract void destroyBitmaps();
 
     public abstract void init(ImageView imageView, ImageView imageView2, LockScreenUtils lockScreenUtils);
 
-    public abstract void ResetImage();
+    public abstract void resetImage();
 
     ZipperLock(int width, int height, Context context) {
         this.width = width;

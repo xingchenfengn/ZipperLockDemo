@@ -11,9 +11,14 @@ import android.graphics.PorterDuffXfermode;
 import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ImageView;
 
 
+/**
+ * 竖直锁屏locker
+ * Created by xingzhiqiao on 2017/9/15.
+ */
 public class VerticalLocker extends ZipperLock {
     //背景图片
     private Bitmap bmpBg;
@@ -86,18 +91,23 @@ public class VerticalLocker extends ZipperLock {
         this.bmpRezBack = Bitmap.createBitmap(this.width, this.height, Config.ARGB_8888);
         this.canvasBack = new Canvas(this.bmpRezBack);
         this.canvasFront = new Canvas(this.bmpRezFront);
-        SetFront(0.0f);
+        setFrontBitmaps(0.0f);
     }
 
-    public void ChangeImages(float y) {
+    /**
+     * 根据滑动位置绘制图片
+     *
+     * @param y
+     */
+    public void changeImages(float y) {
         this.unlock = ((double) ((this.delta / 2.0f) + y)) >= this.limit;
         if (y < ((float) (this.height - (this.pendantLength / 2)))) {
-            SetBack(y);
-            SetFront(y);
+            setBackBitmaps(y);
+            setFrontBitmaps(y);
         }
     }
 
-    public void CheckMotionEvent(MotionEvent event) {
+    public void checkMotionEvent(MotionEvent event) {
         switch (MotionEventCompat.getActionMasked(event)) {
             case MotionEvent.ACTION_DOWN:
                 this.unlock = false;
@@ -111,7 +121,7 @@ public class VerticalLocker extends ZipperLock {
                 this.shouldDrag = false;
                 if (!this.unlock) {
                     this.imgZipper.setImageBitmap(this.bmpBg);
-                    SetFront(0.0f);
+                    setFrontBitmaps(0.0f);
                     return;
                 } else {
                     //TODO 解锁处理
@@ -120,7 +130,7 @@ public class VerticalLocker extends ZipperLock {
                 }
             case MotionEvent.ACTION_MOVE:
                 if (this.shouldDrag && event.getY() - this.delta >= 0.0f) {
-                    ChangeImages(event.getY() - this.delta);
+                    changeImages(event.getY() - this.delta);
                     return;
                 }
                 return;
@@ -129,14 +139,20 @@ public class VerticalLocker extends ZipperLock {
         }
     }
 
-    public void ResetImage() {
-        this.imgZipper.setVisibility(0);
-        this.imgFront.setVisibility(0);
+    /**
+     * 重置locker
+     */
+    public void resetImage() {
+        this.imgZipper.setVisibility(View.VISIBLE);
+        this.imgFront.setVisibility(View.VISIBLE);
         this.imgZipper.setImageBitmap(this.bmpBg);
-        SetFront(0.0f);
+        setFrontBitmaps(0.0f);
     }
 
-    public void DestroyBitmaps() {
+    /**
+     * 回收bitmap
+     */
+    public void destroyBitmaps() {
         if (this.bmpMask != null) {
             this.bmpMask.recycle();
             this.bmpMask = null;
@@ -167,7 +183,12 @@ public class VerticalLocker extends ZipperLock {
         }
     }
 
-    private void SetBack(float y) {
+    /**
+     * 设置背景图片
+     *
+     * @param y
+     */
+    private void setBackBitmaps(float y) {
         if (this.bmpMask != null && this.bmpBg != null && this.bmpRezBack != null) {
             this.canvasBack.drawColor(0, Mode.CLEAR);
             this.canvasBack.drawBitmap(this.bmpMask, (float) (-this.offset), ((float) (-this.step)) + y, new Paint());
@@ -176,7 +197,12 @@ public class VerticalLocker extends ZipperLock {
         }
     }
 
-    private void SetFront(float y) {
+    /**
+     * 设置前面图片
+     *
+     * @param y
+     */
+    private void setFrontBitmaps(float y) {
         if (this.bmpZipper != null && this.bmpPendant != null && this.bmpRezFront != null) {
             this.canvasFront.drawColor(0, Mode.CLEAR);
             this.canvasFront.drawBitmap(this.bmpZipper, (float) (-this.offset), ((float) (-this.step)) + y, null);
@@ -184,9 +210,5 @@ public class VerticalLocker extends ZipperLock {
             this.canvasFront.drawBitmap(this.bmpPendant, (float) (-this.offset), ((float) (-this.step)) + y, null);
             this.imgFront.setImageBitmap(this.bmpRezFront);
         }
-    }
-
-    public int getMaskWigth() {
-        return this.bmpMask.getWidth();
     }
 }

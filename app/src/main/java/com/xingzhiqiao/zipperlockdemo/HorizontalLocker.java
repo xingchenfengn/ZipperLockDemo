@@ -10,8 +10,13 @@ import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.support.v4.view.MotionEventCompat;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ImageView;
 
+/**
+ * 水平锁屏locker
+ * Created by xingzhiqiao on 2017/9/15.
+ */
 public class HorizontalLocker extends ZipperLock {
     private Bitmap bmpBg;
     private Bitmap bmpMask;
@@ -64,18 +69,18 @@ public class HorizontalLocker extends ZipperLock {
         this.canvasFront = new Canvas(this.bmpRezFront);
         this.canvasBack = new Canvas(this.bmpRezBack);
         this.imgZipper.setImageBitmap(this.bmpBg);
-        SetFront(0.0f);
+        setFrontBitmap(0.0f);
     }
 
-    public void ChangeImages(float y) {
+    public void changeImages(float y) {
         this.unlock = ((double) ((this.delta / 2.0f) + y)) >= this.limit;
         if (y < ((float) (this.width - (this.pendantLength / 2)))) {
-            SetBack(y);
-            SetFront(y);
+            setBackBitmap(y);
+            setFrontBitmap(y);
         }
     }
 
-    public void CheckMotionEvent(MotionEvent event) {
+    public void checkMotionEvent(MotionEvent event) {
         switch (MotionEventCompat.getActionMasked(event)) {
             case 0:
                 this.unlock = false;
@@ -89,19 +94,16 @@ public class HorizontalLocker extends ZipperLock {
                 this.shouldDrag = false;
                 if (!this.unlock) {
                     this.imgZipper.setImageBitmap(this.bmpBg);
-                    SetFront(0.0f);
-                    return;
-                } else if (this.context.getSharedPreferences("MY_PREF", 0).getBoolean("pinLock", false)) {
-                    this.imgZipper.setVisibility(8);
-                    this.imgFront.setVisibility(8);
+                    setFrontBitmap(0.0f);
                     return;
                 } else {
+                    //TODO 解锁处理
 //                    this.mLockScreenUtils.unlockScreen();
                     return;
                 }
             case 2:
                 if (this.shouldDrag && event.getX() - this.delta >= 0.0f) {
-                    ChangeImages(event.getX() - this.delta);
+                    changeImages(event.getX() - this.delta);
                     return;
                 }
                 return;
@@ -110,14 +112,16 @@ public class HorizontalLocker extends ZipperLock {
         }
     }
 
-    public void ResetImage() {
-        this.imgZipper.setVisibility(0);
-        this.imgFront.setVisibility(0);
+    @Override
+    public void resetImage() {
+        this.imgZipper.setVisibility(View.VISIBLE);
+        this.imgFront.setVisibility(View.VISIBLE);
         this.imgZipper.setImageBitmap(this.bmpBg);
-        SetFront(0.0f);
+        setFrontBitmap(0.0f);
     }
 
-    private void SetBack(float y) {
+
+    private void setBackBitmap(float y) {
         if (this.bmpMask != null && this.bmpBg != null && this.bmpRezBack != null) {
             this.canvasBack.drawColor(0, Mode.CLEAR);
             this.canvasBack.drawBitmap(this.bmpMask, ((float) ((-this.bmpMask.getWidth()) / 2)) + y, 0.0f, new Paint());
@@ -126,7 +130,12 @@ public class HorizontalLocker extends ZipperLock {
         }
     }
 
-    private void SetFront(float y) {
+    /**
+     * 绘制前面的图片
+     *
+     * @param y
+     */
+    private void setFrontBitmap(float y) {
         if (this.bmpZipper != null && this.bmpPendant != null && this.bmpRezFront != null) {
             this.canvasFront.drawColor(0, Mode.CLEAR);
             this.canvasFront.drawBitmap(this.bmpZipper, ((float) ((-this.bmpMask.getWidth()) / 2)) + y, 0.0f, null);
@@ -135,7 +144,10 @@ public class HorizontalLocker extends ZipperLock {
         }
     }
 
-    public void DestroyBitmaps() {
+    /**
+     * 销毁图片
+     */
+    public void destroyBitmaps() {
         if (this.bmpMask != null) {
             this.bmpMask.recycle();
             this.bmpMask = null;
