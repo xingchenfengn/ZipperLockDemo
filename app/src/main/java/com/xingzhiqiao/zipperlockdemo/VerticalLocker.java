@@ -14,7 +14,7 @@ import android.view.MotionEvent;
 import android.widget.ImageView;
 
 
-public class Type1 extends ZipperLock {
+public class VerticalLocker extends ZipperLock {
     //背景图片
     private Bitmap bmpBg;
     //拉环
@@ -36,18 +36,18 @@ public class Type1 extends ZipperLock {
     private int offset = 0;
     private Paint f3102p;
 
-    public Type1(int width, int height, Context context) {
+    public VerticalLocker(int width, int height, Context context) {
         super(width, height, context);
     }
 
-    public void Init(ImageView imgZip, ImageView imgFront, LockScreenUtils lockScreenUtils) {
+    public void init(ImageView imgZip, ImageView imgFront, LockScreenUtils lockScreenUtils) {
         this.imgZipper = imgZip;
         this.imgFront = imgFront;
         this.bmpRezBack = Bitmap.createBitmap(this.width, this.height, Config.ARGB_8888);
         this.bmpRezFront = Bitmap.createBitmap(this.width, this.height, Config.ARGB_8888);
-        this.bmpZipper = BitmapFactory.decodeResource(this.context.getResources(), this.context.getResources().getIdentifier("zipper_v_0", "drawable", this.context.getPackageName()));
-        this.bmpMask = BitmapFactory.decodeResource(this.context.getResources(), this.context.getResources().getIdentifier("mask_vertical", "drawable", this.context.getPackageName()));
-        this.bmpPendant = BitmapFactory.decodeResource(this.context.getResources(), this.context.getResources().getIdentifier("pendant_v_0", "drawable", this.context.getPackageName()));
+        this.bmpZipper = BitmapFactory.decodeResource(this.context.getResources(), R.drawable.zipper_v_0);
+        this.bmpMask = BitmapFactory.decodeResource(this.context.getResources(), R.drawable.mask_vertical);
+        this.bmpPendant = BitmapFactory.decodeResource(this.context.getResources(), R.drawable.pendant_v_0);
 
         this.step = (int) (((double) this.bmpZipper.getHeight()) * 0.3535d);
         if (this.bmpZipper.getHeight() < this.step + this.height) {
@@ -68,7 +68,7 @@ public class Type1 extends ZipperLock {
         this.bmpZipperHalf = Bitmap.createBitmap(this.bmpZipper, 0, this.step, this.bmpZipper.getWidth(), this.bmpZipper.getHeight() - this.step);
         this.bmpZipperHalf = Bitmap.createScaledBitmap(this.bmpZipperHalf, this.bmpZipperHalf.getWidth(), this.height, true);
         this.bmpZipper = Bitmap.createBitmap(this.bmpZipper, 0, 0, this.bmpZipper.getWidth(), this.step);
-        this.bmpBg = BitmapFactory.decodeResource(this.context.getResources(), this.context.getResources().getIdentifier("bg_zipper_0", "drawable", this.context.getPackageName()));
+        this.bmpBg = BitmapFactory.decodeResource(this.context.getResources(), R.drawable.bg_zipper_0);
         float a = CheckDimensions(this.bmpBg.getWidth(), this.bmpBg.getHeight(), this.width, this.height);
         this.bmpBg = Bitmap.createScaledBitmap(this.bmpBg, (int) (((float) this.bmpBg.getWidth()) * a), (int) (((float) this.bmpBg.getHeight()) * a), true);
         this.pendantWidth = ((int) (((double) this.bmpMask.getWidth()) * 0.16d)) / 2;
@@ -87,17 +87,6 @@ public class Type1 extends ZipperLock {
         this.canvasBack = new Canvas(this.bmpRezBack);
         this.canvasFront = new Canvas(this.bmpRezFront);
         SetFront(0.0f);
-    }
-
-    private Bitmap deresouceFromBM(int resouceId, Context context) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeResource(context.getResources(), resouceId, options);
-        options.inSampleSize = 2;
-        options.inPreferredConfig = Config.RGB_565;
-        options.inJustDecodeBounds = false;
-        options.inPurgeable = true;
-        return BitmapFactory.decodeResource(context.getResources(), resouceId, options);
     }
 
     public void ChangeImages(float y) {
@@ -191,6 +180,7 @@ public class Type1 extends ZipperLock {
         if (this.bmpZipper != null && this.bmpPendant != null && this.bmpRezFront != null) {
             this.canvasFront.drawColor(0, Mode.CLEAR);
             this.canvasFront.drawBitmap(this.bmpZipper, (float) (-this.offset), ((float) (-this.step)) + y, null);
+            Log.d("xzq", "x=" + (-offset) + "y=" + ((-this.step) + y) + "step=" + step);
             this.canvasFront.drawBitmap(this.bmpPendant, (float) (-this.offset), ((float) (-this.step)) + y, null);
             this.imgFront.setImageBitmap(this.bmpRezFront);
         }

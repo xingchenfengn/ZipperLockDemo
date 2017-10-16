@@ -24,7 +24,7 @@ public abstract class ZipperLock {
 
     public abstract void DestroyBitmaps();
 
-    public abstract void Init(ImageView imageView, ImageView imageView2, LockScreenUtils lockScreenUtils);
+    public abstract void init(ImageView imageView, ImageView imageView2, LockScreenUtils lockScreenUtils);
 
     public abstract void ResetImage();
 

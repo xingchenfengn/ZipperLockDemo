@@ -12,7 +12,7 @@ import android.support.v4.view.MotionEventCompat;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
-public class Type2 extends ZipperLock {
+public class HorizontalLocker extends ZipperLock {
     private Bitmap bmpBg;
     private Bitmap bmpMask;
     private Bitmap bmpPendant;
@@ -26,33 +26,30 @@ public class Type2 extends ZipperLock {
     private ImageView imgFront;
     private Paint f3103p;
 
-    public Type2(int width, int height, Context context) {
+    public HorizontalLocker(int width, int height, Context context) {
         super(width, height, context);
     }
 
-    public void Init(ImageView imgZip, ImageView imgFront, LockScreenUtils lockScreenUtils) {
+    public void init(ImageView imgZip, ImageView imgFront, LockScreenUtils lockScreenUtils) {
         this.imgZipper = imgZip;
         this.imgFront = imgFront;
         this.mLockScreenUtils = lockScreenUtils;
         this.bmpRezBack = Bitmap.createBitmap(this.width, this.height, Config.ARGB_8888);
         this.bmpRezFront = Bitmap.createBitmap(this.width, this.height, Config.ARGB_8888);
         this.bmpZipperHalf = Bitmap.createBitmap(this.width, this.height, Config.ARGB_8888);
-        int zipper = this.context.getSharedPreferences(String.valueOf(this.context.getPackageName()), 0).getInt(this.context.getString(R.string.ZIPPER_SELECTED_PREF_KEY), 0);
-        int pendant = this.context.getSharedPreferences(String.valueOf(this.context.getPackageName()), 0).getInt(this.context.getString(R.string.PENDANT_SELECTED_PREF_KEY), 0);
-        int bg = this.context.getSharedPreferences(String.valueOf(this.context.getPackageName()), 0).getInt(this.context.getString(R.string.BG_SELECTED_PREF_KEY), 0);
-        this.bmpMask = BitmapFactory.decodeResource(this.context.getResources(), this.context.getResources().getIdentifier("mask_horizontal", "drawable", this.context.getPackageName()));
+        this.bmpMask = BitmapFactory.decodeResource(this.context.getResources(), R.drawable.mask_horizontal);
         this.bmpMask = Bitmap.createScaledBitmap(this.bmpMask, this.width * 2, this.height, true);
         this.pendantWidth = (int) (((double) this.bmpMask.getHeight()) * 0.1015d);
         this.pendantLength = (int) (((double) this.bmpMask.getWidth()) * 0.16d);
         this.center = (int) (((double) this.bmpMask.getHeight()) * 0.7226d);
         this.limit = ((double) this.width) * 0.8d;
-        this.bmpZipper = BitmapFactory.decodeResource(this.context.getResources(), this.context.getResources().getIdentifier("zipper_h_" + zipper, "drawable", this.context.getPackageName()));
+        this.bmpZipper = BitmapFactory.decodeResource(this.context.getResources(), R.drawable.zipper_h_0);
         this.bmpZipper = Bitmap.createScaledBitmap(this.bmpZipper, this.width * 2, this.height, true);
         this.bmpZipperHalf = Bitmap.createBitmap(this.bmpZipper, this.width, 0, this.width, this.height);
         this.bmpZipper = Bitmap.createBitmap(this.bmpZipper, 0, 0, this.width, this.height);
-        this.bmpPendant = BitmapFactory.decodeResource(this.context.getResources(), this.context.getResources().getIdentifier("pendant_h_" + pendant, "drawable", this.context.getPackageName()));
+        this.bmpPendant = BitmapFactory.decodeResource(this.context.getResources(), R.drawable.pendant_h_0);
         this.bmpPendant = Bitmap.createScaledBitmap(this.bmpPendant, this.width * 2, this.height, true);
-        this.bmpBg = BitmapFactory.decodeResource(this.context.getResources(), this.context.getResources().getIdentifier("bg_zipper_" + bg, "drawable", this.context.getPackageName()));
+        this.bmpBg = BitmapFactory.decodeResource(this.context.getResources(), R.drawable.bg_zipper_0);
         float a = CheckDimensions(this.bmpBg.getWidth(), this.bmpBg.getHeight(), this.width, this.height);
         this.bmpBg = Bitmap.createScaledBitmap(this.bmpBg, (int) (((float) this.bmpBg.getWidth()) * a), (int) (((float) this.bmpBg.getHeight()) * a), true);
         this.f3103p = new Paint(1);
