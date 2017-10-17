@@ -9,7 +9,6 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.support.v4.view.MotionEventCompat;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -41,11 +40,13 @@ public class VerticalLocker extends ZipperLock {
     private int offset = 0;
     private Paint f3102p;
 
+    private UnlockListener unlockListener;
+
     public VerticalLocker(int width, int height, Context context) {
         super(width, height, context);
     }
 
-    public void init(ImageView imgZip, ImageView imgFront, LockScreenUtils lockScreenUtils) {
+    public void init(ImageView imgZip, ImageView imgFront, UnlockListener unlockListener) {
         this.imgZipper = imgZip;
         this.imgFront = imgFront;
         this.bmpRezBack = Bitmap.createBitmap(this.width, this.height, Config.ARGB_8888);
@@ -53,6 +54,7 @@ public class VerticalLocker extends ZipperLock {
         this.bmpZipper = BitmapFactory.decodeResource(this.context.getResources(), R.drawable.zipper_v_0);
         this.bmpMask = BitmapFactory.decodeResource(this.context.getResources(), R.drawable.mask_vertical);
         this.bmpPendant = BitmapFactory.decodeResource(this.context.getResources(), R.drawable.pendant_v_0);
+        this.unlockListener = unlockListener;
 
         this.step = (int) (((double) this.bmpZipper.getHeight()) * 0.3535d);
         if (this.bmpZipper.getHeight() < this.step + this.height) {
@@ -74,7 +76,7 @@ public class VerticalLocker extends ZipperLock {
         this.bmpZipperHalf = Bitmap.createScaledBitmap(this.bmpZipperHalf, this.bmpZipperHalf.getWidth(), this.height, true);
         this.bmpZipper = Bitmap.createBitmap(this.bmpZipper, 0, 0, this.bmpZipper.getWidth(), this.step);
         this.bmpBg = BitmapFactory.decodeResource(this.context.getResources(), R.drawable.bg_zipper_0);
-        float a = CheckDimensions(this.bmpBg.getWidth(), this.bmpBg.getHeight(), this.width, this.height);
+        float a = checkDimensions(this.bmpBg.getWidth(), this.bmpBg.getHeight(), this.width, this.height);
         this.bmpBg = Bitmap.createScaledBitmap(this.bmpBg, (int) (((float) this.bmpBg.getWidth()) * a), (int) (((float) this.bmpBg.getHeight()) * a), true);
         this.pendantWidth = ((int) (((double) this.bmpMask.getWidth()) * 0.16d)) / 2;
         this.pendantLength = (int) (((double) this.bmpMask.getHeight()) * 0.1162d);
@@ -84,7 +86,9 @@ public class VerticalLocker extends ZipperLock {
         this.f3102p.setAntiAlias(true);
         this.f3102p.setDither(true);
         this.canvasBack = new Canvas(this.bmpRezBack);
+        //绘制背景
         this.canvasBack.drawBitmap(this.bmpBg, 0.0f, 0.0f, null);
+        //绘制拉链
         this.canvasBack.drawBitmap(this.bmpZipperHalf, (float) (-this.offset), 0.0f, null);
         this.bmpBg = Bitmap.createBitmap(this.bmpRezBack, 0, 0, this.bmpRezBack.getWidth(), this.bmpRezBack.getHeight());
         this.imgZipper.setImageBitmap(this.bmpBg);
@@ -125,7 +129,9 @@ public class VerticalLocker extends ZipperLock {
                     return;
                 } else {
                     //TODO 解锁处理
-//                    this.mLockScreenUtils.unlockScreen();
+                    if (unlockListener != null) {
+                        unlockListener.unLock();
+                    }
                     return;
                 }
             case MotionEvent.ACTION_MOVE:
@@ -205,8 +211,9 @@ public class VerticalLocker extends ZipperLock {
     private void setFrontBitmaps(float y) {
         if (this.bmpZipper != null && this.bmpPendant != null && this.bmpRezFront != null) {
             this.canvasFront.drawColor(0, Mode.CLEAR);
+            //绘制背景
             this.canvasFront.drawBitmap(this.bmpZipper, (float) (-this.offset), ((float) (-this.step)) + y, null);
-            Log.d("xzq", "x=" + (-offset) + "y=" + ((-this.step) + y) + "step=" + step);
+            //绘制拉锁
             this.canvasFront.drawBitmap(this.bmpPendant, (float) (-this.offset), ((float) (-this.step)) + y, null);
             this.imgFront.setImageBitmap(this.bmpRezFront);
         }

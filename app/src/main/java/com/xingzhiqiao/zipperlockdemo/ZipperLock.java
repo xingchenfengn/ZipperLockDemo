@@ -13,7 +13,6 @@ public abstract class ZipperLock {
     int height;
     ImageView imgZipper;
     double limit;
-    LockScreenUtils mLockScreenUtils;
     int pendantLength;
     int pendantWidth;
     boolean shouldDrag = false;
@@ -27,7 +26,7 @@ public abstract class ZipperLock {
 
     public abstract void destroyBitmaps();
 
-    public abstract void init(ImageView imageView, ImageView imageView2, LockScreenUtils lockScreenUtils);
+    public abstract void init(ImageView imageView, ImageView imageView2, UnlockListener lockUtils);
 
     public abstract void resetImage();
 
@@ -37,7 +36,16 @@ public abstract class ZipperLock {
         this.context = context;
     }
 
-    float CheckDimensions(int bmpWidth, int bmpHeight, int screenWidth, int screenHeight) {
+    /**
+     * 获取缩放比例
+     *
+     * @param bmpWidth     图片宽
+     * @param bmpHeight    图片高
+     * @param screenWidth  屏幕宽
+     * @param screenHeight 屏幕高
+     * @return
+     */
+    float checkDimensions(int bmpWidth, int bmpHeight, int screenWidth, int screenHeight) {
         if (bmpWidth >= screenWidth && bmpHeight >= screenHeight) {
             return Math.max(((float) screenWidth) / ((float) bmpWidth), ((float) screenHeight) / ((float) bmpHeight));
         }

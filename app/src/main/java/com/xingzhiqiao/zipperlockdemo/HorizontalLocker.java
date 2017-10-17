@@ -31,14 +31,16 @@ public class HorizontalLocker extends ZipperLock {
     private ImageView imgFront;
     private Paint f3103p;
 
+    private UnlockListener unlockListener;
+
     public HorizontalLocker(int width, int height, Context context) {
         super(width, height, context);
     }
 
-    public void init(ImageView imgZip, ImageView imgFront, LockScreenUtils lockScreenUtils) {
+    public void init(ImageView imgZip, ImageView imgFront, UnlockListener unlockListener) {
         this.imgZipper = imgZip;
         this.imgFront = imgFront;
-        this.mLockScreenUtils = lockScreenUtils;
+        this.unlockListener = unlockListener;
         this.bmpRezBack = Bitmap.createBitmap(this.width, this.height, Config.ARGB_8888);
         this.bmpRezFront = Bitmap.createBitmap(this.width, this.height, Config.ARGB_8888);
         this.bmpZipperHalf = Bitmap.createBitmap(this.width, this.height, Config.ARGB_8888);
@@ -55,7 +57,7 @@ public class HorizontalLocker extends ZipperLock {
         this.bmpPendant = BitmapFactory.decodeResource(this.context.getResources(), R.drawable.pendant_h_0);
         this.bmpPendant = Bitmap.createScaledBitmap(this.bmpPendant, this.width * 2, this.height, true);
         this.bmpBg = BitmapFactory.decodeResource(this.context.getResources(), R.drawable.bg_zipper_0);
-        float a = CheckDimensions(this.bmpBg.getWidth(), this.bmpBg.getHeight(), this.width, this.height);
+        float a = checkDimensions(this.bmpBg.getWidth(), this.bmpBg.getHeight(), this.width, this.height);
         this.bmpBg = Bitmap.createScaledBitmap(this.bmpBg, (int) (((float) this.bmpBg.getWidth()) * a), (int) (((float) this.bmpBg.getHeight()) * a), true);
         this.f3103p = new Paint(1);
         this.f3103p.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
@@ -98,7 +100,9 @@ public class HorizontalLocker extends ZipperLock {
                     return;
                 } else {
                     //TODO 解锁处理
-//                    this.mLockScreenUtils.unlockScreen();
+                    if (unlockListener != null) {
+                        unlockListener.unLock();
+                    }
                     return;
                 }
             case 2:

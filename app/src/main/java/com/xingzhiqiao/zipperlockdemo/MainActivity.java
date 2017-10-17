@@ -68,7 +68,12 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         this.imgZipper.setOnTouchListener(this);
         this.imgFront = (ImageView) findViewById(R.id.imgFront);
         this.imgFront.setOnTouchListener(this);
-        this.mZipperLock.init(this.imgZipper, this.imgFront, null);
+        this.mZipperLock.init(this.imgZipper, this.imgFront, new UnlockListener() {
+            @Override
+            public void unLock() {
+                finish();
+            }
+        });
     }
 
     @Override
