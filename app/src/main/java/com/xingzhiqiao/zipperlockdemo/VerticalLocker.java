@@ -38,7 +38,7 @@ public class VerticalLocker extends ZipperLock {
     private Canvas canvasFront;
     private ImageView imgFront;
     private int offset = 0;
-    private Paint f3102p;
+    private Paint bgPaint;
 
     private UnlockListener unlockListener;
 
@@ -81,10 +81,11 @@ public class VerticalLocker extends ZipperLock {
         this.pendantWidth = ((int) (((double) this.bmpMask.getWidth()) * 0.16d)) / 2;
         this.pendantLength = (int) (((double) this.bmpMask.getHeight()) * 0.1162d);
         this.limit = 0.8d * ((double) this.height);
-        this.f3102p = new Paint(1);
-        this.f3102p.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
-        this.f3102p.setAntiAlias(true);
-        this.f3102p.setDither(true);
+        this.bgPaint = new Paint(1);
+        //设置图像混合模式为取交集
+        this.bgPaint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+        this.bgPaint.setAntiAlias(true);
+        this.bgPaint.setDither(true);
         this.canvasBack = new Canvas(this.bmpRezBack);
         //绘制背景
         this.canvasBack.drawBitmap(this.bmpBg, 0.0f, 0.0f, null);
@@ -198,7 +199,7 @@ public class VerticalLocker extends ZipperLock {
         if (this.bmpMask != null && this.bmpBg != null && this.bmpRezBack != null) {
             this.canvasBack.drawColor(0, Mode.CLEAR);
             this.canvasBack.drawBitmap(this.bmpMask, (float) (-this.offset), ((float) (-this.step)) + y, new Paint());
-            this.canvasBack.drawBitmap(this.bmpBg, 0.0f, 0.0f, this.f3102p);
+            this.canvasBack.drawBitmap(this.bmpBg, 0.0f, 0.0f, this.bgPaint);
             this.imgZipper.setImageBitmap(this.bmpRezBack);
         }
     }

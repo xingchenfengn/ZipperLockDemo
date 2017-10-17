@@ -29,7 +29,7 @@ public class HorizontalLocker extends ZipperLock {
     private Canvas canvasFront;
     private int center;
     private ImageView imgFront;
-    private Paint f3103p;
+    private Paint bgPaint;
 
     private UnlockListener unlockListener;
 
@@ -59,10 +59,10 @@ public class HorizontalLocker extends ZipperLock {
         this.bmpBg = BitmapFactory.decodeResource(this.context.getResources(), R.drawable.bg_zipper_0);
         float a = checkDimensions(this.bmpBg.getWidth(), this.bmpBg.getHeight(), this.width, this.height);
         this.bmpBg = Bitmap.createScaledBitmap(this.bmpBg, (int) (((float) this.bmpBg.getWidth()) * a), (int) (((float) this.bmpBg.getHeight()) * a), true);
-        this.f3103p = new Paint(1);
-        this.f3103p.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
-        this.f3103p.setAntiAlias(true);
-        this.f3103p.setDither(true);
+        this.bgPaint = new Paint(1);
+        this.bgPaint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+        this.bgPaint.setAntiAlias(true);
+        this.bgPaint.setDither(true);
         this.canvasBack = new Canvas(this.bmpRezBack);
         this.canvasBack.drawBitmap(this.bmpBg, 0.0f, 0.0f, null);
         this.canvasBack.drawBitmap(this.bmpZipperHalf, 0.0f, 0.0f, null);
@@ -129,7 +129,7 @@ public class HorizontalLocker extends ZipperLock {
         if (this.bmpMask != null && this.bmpBg != null && this.bmpRezBack != null) {
             this.canvasBack.drawColor(0, Mode.CLEAR);
             this.canvasBack.drawBitmap(this.bmpMask, ((float) ((-this.bmpMask.getWidth()) / 2)) + y, 0.0f, new Paint());
-            this.canvasBack.drawBitmap(this.bmpBg, 0.0f, 0.0f, this.f3103p);
+            this.canvasBack.drawBitmap(this.bmpBg, 0.0f, 0.0f, this.bgPaint);
             this.imgZipper.setImageBitmap(this.bmpRezBack);
         }
     }
